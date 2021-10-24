@@ -1,31 +1,30 @@
-<template id="#item-template">
+<template>
   <li>
     <div
-      :class="[{ bold: isFolder }, { item_name: !isFolder }]"
+      tabindex="0"
+      :class="[{ bold: isDirectory }, { item_name: !isDirectory }]"
       @click="toggle"
-      @dblclick="makeFolder"
     >
+      <img v-if="isDirectory" src="../assets/folder.png" />
+      <img v-if="isFile" src="../assets/file.png" />
+      <img v-if="isLink" src="../assets/link.png" />
       {{ item.name }}
-      <span v-if="isFolder">[{{ isOpen ? '-' : '+' }}]</span>
+      <span v-if="isDirectory">[{{ isOpen ? '-' : '+' }}]</span>
     </div>
-    <ul v-show="isOpen" v-if="isFolder">
+    <ol v-show="isOpen" v-if="isDirectory" :class="item.name">
       <tree-item
         class="item"
         v-for="(child, index) in item.contents"
         :key="index"
         :item="child"
-        @make-folder="$emit('make-folder', $event)"
-        @add-item="$emit('add-item', $event)"
       ></tree-item>
-    </ul>
+    </ol>
   </li>
 </template>
 
 <script>
 export default {
   name: 'tree-item',
-
-  components: {},
   props: {
     item: Object,
   },
@@ -35,20 +34,20 @@ export default {
     }
   },
   computed: {
-    isFolder: function() {
+    isDirectory: function() {
       return this.item.contents && this.item.contents.length
+    },
+    isFile: function() {
+      return this.item.type === 'file'
+    },
+    isLink: function() {
+      return this.item.type === 'link'
     },
   },
   methods: {
     toggle: function() {
-      if (this.isFolder) {
+      if (this.isDirectory) {
         this.isOpen = !this.isOpen
-      }
-    },
-    makeFolder: function() {
-      if (!this.isFolder) {
-        this.$emit('make-folder', this.item)
-        this.isOpen = true
       }
     },
   },
