@@ -32,26 +32,10 @@ body {
   margin-left: 150px;
   margin-top: 100px;
 }
-.item {
-  cursor: pointer;
-}
-.item_name:focus {
-  color: rgb(144, 12, 111);
-}
-.item_name {
-  color: rgb(19, 131, 146);
-}
-.bold {
-  font-weight: bold;
-}
-ol {
+
+#file-tree,
+.list {
   padding-left: 1em;
   line-height: 1.5em;
-}
-li::marker {
-  font-weight: bold;
-}
-img {
-  width: 25px;
 }
 </style>

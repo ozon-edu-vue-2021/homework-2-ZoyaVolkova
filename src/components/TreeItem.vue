@@ -5,13 +5,11 @@
       :class="[{ bold: isDirectory }, { item_name: !isDirectory }]"
       @click="toggle"
     >
-      <img v-if="isDirectory" src="../assets/folder.png" />
-      <img v-if="isFile" src="../assets/file.png" />
-      <img v-if="isLink" src="../assets/link.png" />
+      <img class="icon" :src="getSrc" />
       {{ item.name }}
       <span v-if="isDirectory">[{{ isOpen ? '-' : '+' }}]</span>
     </div>
-    <ol v-show="isOpen" v-if="isDirectory" :class="item.name">
+    <ol v-if="isDirectory && isOpen" class="list">
       <tree-item
         class="item"
         v-for="(child, index) in item.contents"
@@ -31,17 +29,21 @@ export default {
   data: function() {
     return {
       isOpen: false,
+      type: this.item.type,
     }
   },
   computed: {
     isDirectory: function() {
       return this.item.contents && this.item.contents.length
     },
-    isFile: function() {
-      return this.item.type === 'file'
-    },
-    isLink: function() {
-      return this.item.type === 'link'
+    getSrc: function() {
+      if (this.type === 'file') {
+        return 'images/file.png'
+      } else if (this.type === 'link') {
+        return 'images/link.png'
+      } else {
+        return 'images/folder.png'
+      }
     },
   },
   methods: {
@@ -53,3 +55,24 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.item {
+  cursor: pointer;
+}
+.item_name:focus {
+  color: rgb(144, 12, 111);
+}
+.item_name {
+  color: rgb(19, 131, 146);
+}
+.bold {
+  font-weight: bold;
+}
+li::marker {
+  font-weight: bold;
+}
+.icon {
+  width: 25px;
+}
+</style>
